@@ -1,0 +1,23 @@
+diff --git a/Model/Adminhtml/System/Config/Source/Color.php b/Model/Adminhtml/System/Config/Source/Color.php
+index 019ba7b51..662057736 100644
+--- a/Model/Adminhtml/System/Config/Source/Color.php
++++ b/Model/Adminhtml/System/Config/Source/Color.php
+@@ -25,7 +25,7 @@ class Color extends Field
+         $html = $element->getElementHtml();
+         $value = $element->getData('value');
+ 
+-        $html .= '<script type="text/javascript">
++/*        $html .= '<script type="text/javascript">
+             require(["jquery"], function ($) {
+                 $(document).ready(function (e) {
+                     $("#' . $element->getHtmlId() . '").css("background-color","#' . $value . '");
+@@ -44,7 +44,8 @@ class Color extends Field
+                 });
+             });
+             </script>';
+-
++*/
+         return $html;
+     }
+ }
++

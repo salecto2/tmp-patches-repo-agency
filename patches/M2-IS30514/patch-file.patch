@@ -1,0 +1,13 @@
+diff --git magento/module-elasticsearch/Model/Adapter/BatchDataMapper/ProductDataMapper.php magento/module-elasticsearch/Model/Adapter/BatchDataMapper/ProductDataMapper.php
+index 0edc63b10f9a..7b330a8658c2 100644
+--- magento/module-elasticsearch/Model/Adapter/BatchDataMapper/ProductDataMapper.php
++++ magento/module-elasticsearch/Model/Adapter/BatchDataMapper/ProductDataMapper.php
+@@ -311,7 +311,7 @@ function (string $valueId) {
+             && in_array($attribute->getAttributeCode(), $this->sortableAttributesValuesToImplode)
+             && count($attributeValues) > 1
+         ) {
+-            $attributeValues = [$productId => implode(' ', $attributeValues)];
++            $attributeValues = [$productId => substr(implode(' ', array_unique($attributeValues)), 0, 32766)];
+         }
+ 
+         if (in_array($attribute->getAttributeCode(), $this->sortableCaseSensitiveAttributes)) {

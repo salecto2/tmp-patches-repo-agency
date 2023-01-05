@@ -1,0 +1,32 @@
+diff --git a/Model/Source/PageType.php b/Model/Source/PageType.php
+index cdc202d..078d566 100644
+--- a/Model/Source/PageType.php
++++ b/Model/Source/PageType.php
+@@ -1,4 +1,19 @@
+ <?php
++/**
++ * Aheadworks Inc.
++ *
++ * NOTICE OF LICENSE
++ *
++ * This source file is subject to the EULA
++ * that is bundled with this package in the file LICENSE.txt.
++ * It is also available through the world-wide-web at this URL:
++ * https://aheadworks.com/end-user-license-agreement/
++ *
++ * @package    Freeshippinglabel
++ * @version    1.2.5
++ * @copyright  Copyright (c) 2022 Aheadworks Inc. (https://aheadworks.com/)
++ * @license    https://aheadworks.com/end-user-license-agreement/
++ */
+ namespace Aheadworks\Freeshippinglabel\Model\Source;
+ 
+ /**
+@@ -67,6 +82,7 @@ class PageType implements \Magento\Framework\Data\OptionSourceInterface
+                 $pageType = self::SHOPPING_CART;
+                 break;
+             case 'checkout_index_index':
++            case 'onestepcheckout_index_index':
+                 $pageType = self::CHECKOUT;
+                 break;
+         }

@@ -1,0 +1,8 @@
+{
+  "aheadworks/module-freeshippinglabel": {
+    "Fixes - The issue of not showing shipping bar on onestep checkout": {
+      "source": "patches/AW-SB-2/patch-file.patch",
+      "version": "1.2.5"
+    }
+  }
+}

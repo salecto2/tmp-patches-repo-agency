@@ -1,0 +1,44 @@
+diff --git a/view/frontend/web/js/view/form/email.js b/view/frontend/web/js/view/form/email.js
+index 308f703..a12eb51 100755
+--- a/view/frontend/web/js/view/form/email.js	
++++ b/view/frontend/web/js/view/form/email.js	
+@@ -180,9 +180,10 @@ define([
+                 return true;
+             }
+             loginForm.validation();
+-            if (focused === false && !!this.email()) {
++            if (focused === false && !this.email()) {
+                 return !!$(usernameSelector).valid();
+             }
++            loginForm.validation('isValid');
+             validator = loginForm.validate();
+ 
+             return validator.check(usernameSelector);
+diff --git a/view/frontend/web/js/view/place-order/aggregate-validator.js b/view/frontend/web/js/view/place-order/aggregate-validator.js
+index 08a2691..e9a611e 100644
+--- a/view/frontend/web/js/view/place-order/aggregate-validator.js	
++++ b/view/frontend/web/js/view/place-order/aggregate-validator.js	
+@@ -86,7 +86,7 @@ define(
+              */
+             _validateCustomerInformationEmail: function (isValid) {
+                 var customerInfoEmailComponent = registry.get('checkout.customer-information.email'),
+-                isValid = customerInfoEmailComponent.validateEmail(true);
++                isValid = customerInfoEmailComponent.validateEmail(false);
+                 if (!isValid) {
+                     customerInfoEmailComponent.scrollInvalid()
+                 }
+diff --git a/view/frontend/web/js/view/shipping-address.js b/view/frontend/web/js/view/shipping-address.js
+index b42f5ce..119365d 100755
+--- a/view/frontend/web/js/view/shipping-address.js	
++++ b/view/frontend/web/js/view/shipping-address.js	
+@@ -255,9 +255,7 @@ define(
+                         if (address) {
+                             this.fillUpFormWithAddress(address);
+                             this.resetFormValidation();
+-                            if (!this.isFormValid()) {
+-                                currentShippingAddress.address(address);
+-                            }
++                            this.isFormValid();
+                         }
+                     }
+                 }

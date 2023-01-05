@@ -1,0 +1,11 @@
+{
+  "*": {
+    "Fixed admin integration activation getting failed": {
+      "_link": "https://github.com/magento/magento2/pull/32095",
+      "source": "patches/M2-PR32095/patch-file.patch",
+      "depends": {
+        "magento/magento2-base": "2.4.2 | 2.4.2-p1"
+      }
+    }
+  }
+}

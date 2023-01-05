@@ -1,0 +1,8 @@
+{
+    "meetanshi/magento-2-pdf-catalog": {
+        "fixes the color picker breaking the backend UI": {
+            "source": "patches/MT-PC-2/patch-file.patch",
+            "version": "1.0.2"
+        }
+    }
+}

@@ -1,0 +1,74 @@
+diff --git magento/module-tax/Pricing/Render/Adjustment.php magento/module-tax/Pricing/Render/Adjustment.php
+index 0e5c619..2768616 100644
+--- magento/module-tax/Pricing/Render/Adjustment.php
++++ magento/module-tax/Pricing/Render/Adjustment.php
+@@ -183,8 +183,7 @@ class Adjustment extends AbstractAdjustment
+      */
+     public function getDataPriceType(): string
+     {
+-        return $this->amountRender->getPriceType() === 'finalPrice'
+-            ? 'basePrice'
+-            : 'base' . ucfirst($this->amountRender->getPriceType());
++        $priceType = $this->amountRender->getPriceType();
++        return $priceType === 'finalPrice' ? 'basePrice' : ($priceType ? 'base' . ucfirst($priceType) : '');
+     }
+ }
+diff --git magento/module-tax/Test/Unit/Pricing/Render/AdjustmentTest.php magento/module-tax/Test/Unit/Pricing/Render/AdjustmentTest.php
+index 23a468b..c2300a7 100644
+--- magento/module-tax/Test/Unit/Pricing/Render/AdjustmentTest.php
++++ magento/module-tax/Test/Unit/Pricing/Render/AdjustmentTest.php
+@@ -29,8 +29,6 @@ use PHPUnit\Framework\TestCase;
+ class AdjustmentTest extends TestCase
+ {
+     /**
+-     * Context mock
+-     *
+      * @var \Magento\Framework\View\Element\Template\Context
+      */
+     protected $contextMock;
+@@ -54,6 +52,11 @@ class AdjustmentTest extends TestCase
+      */
+     protected $model;
+ 
++    /**
++     * @var AmountRenderInterface
++     */
++    protected $amountRender;
++
+     /**
+      * Init mocks and model
+      */
+@@ -350,4 +353,33 @@ class AdjustmentTest extends TestCase
+ 
+         $this->model->render($amountRender, $arguments);
+     }
++
++    /**
++     * test for method getDataPriceType
++     * @dataProvider dataPriceTypeDataProvider
++     */
++    public function testGetDataPriceType(?string $priceType, string $priceTypeValue): void
++    {
++        $amountRender = $this->getMockBuilder(Amount::class)
++            ->addMethods(['getPriceType'])
++            ->disableOriginalConstructor()
++            ->getMock();
++        $amountRender->expects($this->atLeastOnce())
++            ->method('getPriceType')
++            ->willReturn($priceType);
++        $this->model->render($amountRender, []);
++        //no exception is thrown
++        $this->assertEquals($priceTypeValue, $this->model->getDataPriceType());
++        $this->assertIsString($this->model->getDataPriceType());
++    }
++
++    /**
++     * data provider for testGetDataPriceType
++     *
++     * @return array
++     */
++    public function dataPriceTypeDataProvider(): array
++    {
++        return [['finalPrice', 'basePrice'], [null, '']];
++    }
+ }

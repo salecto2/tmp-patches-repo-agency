@@ -1,0 +1,9 @@
+{
+  "composer/ca-bundle": {
+    "Fixes open_basedir restriction not handled error": {
+      "_link": "https://github.com/composer/ca-bundle/issues/69",
+      "source": "patches/CP-BN-1/patch-file.patch",
+      "version": "1.3.0"
+    }
+  }
+}

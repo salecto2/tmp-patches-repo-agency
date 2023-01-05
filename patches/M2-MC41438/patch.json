@@ -1,0 +1,11 @@
+{
+  "*": {
+    "Fixes Invoice Grand Total wrong if discount applied": {
+      "_link": "https://github.com/magento/magento2/issues/32270",
+      "source": "patches/M2-MC41438/patch-file.patch",
+      "depends": {
+        "magento/magento2-base": "2.4.2 | 2.4.2-p1"
+      }
+    }
+  }
+}

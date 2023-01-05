@@ -1,0 +1,11 @@
+{
+    "*": {
+        "Fixed customized options in product which throws error while displaying price with including and excluding tax": {
+            "_link": "https://github.com/magento/magento2/issues/35500, https://github.com/magento/magento2/commit/1e852be2ab85f3fa7fffa5621caf1a717b32e07d",
+            "source": "patches/M2-MC3157/patch-file.patch",
+            "depends": {
+                "magento/magento2-base": "2.4.5 | 2.4.5-p1"
+            }
+        }
+    }
+}

@@ -1,0 +1,11 @@
+{
+  "*": {
+    "Fixes - Large configurable/bundle products not getting indexed because of elasticsearch limit of 32766.": {
+      "_link": "https://github.com/magento/magento2/issues/30514",
+      "source": "patches/M2-IS30514/patch-file.patch",
+      "depends": {
+        "magento/magento2-base": ">=2.4.3 <=2.4.5"
+      }
+    }
+  }
+}

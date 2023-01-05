@@ -1,0 +1,8 @@
+{
+  "aheadworks/module-onestepcheckout": {
+    "Fixes the checkout validation error": {
+      "source": "patches/AW-OC-2/patch-file.patch",
+      "version": "2.1.1"
+    }
+  }
+}

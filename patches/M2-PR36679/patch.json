@@ -1,0 +1,11 @@
+{
+  "*": {
+    "Fixes - Gif image throws error on frontend product page as color is out of range.": {
+      "_link": "https://github.com/magento/magento2/pull/36679",
+      "source": "patches/M2-PR36679/patch-file.patch",
+      "depends": {
+        "magento/magento2-base": "2.4.5 | 2.4.5-p1"
+      }
+    }
+  }
+}

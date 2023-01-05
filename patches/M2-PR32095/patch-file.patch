@@ -1,0 +1,144 @@
+--- magento/module-integration/Controller/Adminhtml/Integration/TokensExchange.php
++++ magento/module-integration/Controller/Adminhtml/Integration/TokensExchange.php
+@@ -8,16 +8,21 @@ declare(strict_types=1);
+
+ namespace Magento\Integration\Controller\Adminhtml\Integration;
+
+-use Magento\Framework\App\Action\HttpPostActionInterface;
++use Magento\Framework\App\Action\HttpGetActionInterface;
++use Magento\Framework\Exception\LocalizedException;
++use Magento\Framework\Oauth\Exception;
+ use Magento\Integration\Controller\Adminhtml\Integration;
+ use Magento\Integration\Model\Integration as IntegrationModel;
+
+-class TokensExchange extends Integration implements HttpPostActionInterface
++/**
++ * Tokens Exchange for integration
++ */
++class TokensExchange extends Integration implements HttpGetActionInterface
+ {
+     /**
+      * Let the admin know that integration has been sent for activation and token exchange is in process.
+      *
+-     * @param bool   $isReauthorize
++     * @param bool $isReauthorize
+      * @param string $integrationName
+      * @return void
+      */
+@@ -60,7 +65,7 @@ class TokensExchange extends Integration implements HttpPostActionInterface
+             $popupContent = $this->_response->getBody();
+             $consumer = $this->_oauthService->loadConsumer($integration->getConsumerId());
+             if (!$consumer->getId()) {
+-                throw new \Magento\Framework\Oauth\Exception(
++                throw new Exception(
+                     __(
+                         'A consumer with "%1" ID doesn\'t exist. Verify the ID and try again.',
+                         $integration->getConsumerId()
+@@ -74,7 +79,7 @@ class TokensExchange extends Integration implements HttpPostActionInterface
+                 'popup_content' => $popupContent,
+             ];
+             $this->getResponse()->representJson($this->jsonHelper->jsonEncode($result));
+-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
++        } catch (LocalizedException $e) {
+             $this->messageManager->addErrorMessage($e->getMessage());
+             $this->_redirect('*/*');
+             return;
+--- /dev/null
++++ magento/magento2-base/dev/tests/integration/testsuite/Magento/Integration/Controller/Adminhtml/Integration/TokensExchangeTest.php
+@@ -0,0 +1,58 @@
++<?php
++/**
++ * Copyright © Magento, Inc. All rights reserved.
++ * See COPYING.txt for license details.
++ */
++declare(strict_types=1);
++
++namespace Magento\Integration\Controller\Adminhtml\Integration;
++
++use Magento\Framework\App\Request\Http as HttpRequest;
++use Magento\Integration\Api\IntegrationServiceInterface;
++use Magento\TestFramework\TestCase\AbstractBackendController;
++
++/**
++ * Test for \Magento\Integration\Controller\Adminhtml\Integration\TokensExchange.
++ *
++ * @magentoAppArea adminhtml
++ */
++class TokensExchangeTest extends AbstractBackendController
++{
++    private const URL = 'backend/admin/integration/tokensExchange';
++
++    /**
++     * @var IntegrationServiceInterface
++     */
++    private $integrationService;
++
++    /**
++     * @inheritDoc
++     */
++    protected function setUp(): void
++    {
++        parent::setUp();
++
++        $this->integrationService = $this->_objectManager->get(IntegrationServiceInterface::class);
++    }
++
++    /**
++     * Activate integration
++     *
++     * @magentoDataFixture Magento/Integration/_files/integration_all_data.php
++     *
++     * @return void
++     */
++    public function testActivate()
++    {
++        $integration = $this->integrationService->findByName('Fixture Integration');
++
++        $this->getRequest()->setMethod(HttpRequest::METHOD_GET);
++        $this->getRequest()->setParams(['id' => $integration->getId()]);
++        $this->dispatch(self::URL);
++
++        $this->assertStringContainsString(
++            'Please setup or sign in into your 3rd party account to complete setup of this integration.',
++            $this->getResponse()->getBody()
++        );
++    }
++}
+--- /dev/null
++++ magento/magento2-base/dev/tests/integration/testsuite/Magento/Integration/_files/integration_all_data.php
+@@ -0,0 +1,21 @@
++<?php
++/**
++ * Copyright © Magento, Inc. All rights reserved.
++ * See COPYING.txt for license details.
++ */
++declare(strict_types=1);
++
++use Magento\Integration\Api\IntegrationServiceInterface;
++use Magento\TestFramework\Helper\Bootstrap;
++
++$objectManager = Bootstrap::getObjectManager();
++$integrationService = $objectManager->get(IntegrationServiceInterface::class);
++
++$data = [
++    'name' => 'Fixture Integration',
++    'email' => 'john.doe@example.com',
++    'endpoint' => 'https://example.com/endpoint',
++    'identity_link_url' => 'https://example.com/link',
++    'all_resources' => 0,
++];
++$integrationService->create($data);
+
+--- /dev/null
++++ magento/magento2-base/dev/tests/integration/testsuite/Magento/Integration/_files/integration_all_data_rollback.php
+@@ -0,0 +1,10 @@
++<?php
++/**
++ * Copyright © Magento, Inc. All rights reserved.
++ * See COPYING.txt for license details.
++ */
++declare(strict_types=1);
++
++use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
++
++Resolver::getInstance()->requireDataFixture('Magento/Integration/_files/integration_all_permissions_rollback.php');
